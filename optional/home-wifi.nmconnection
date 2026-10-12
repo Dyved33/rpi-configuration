@@ -1,0 +1,30 @@
+# Wi-Fi + static IP in ONE NetworkManager profile (Raspberry Pi OS Bookworm/Trixie).
+# Use ONLY for an offline setup from a Linux PC:
+#   1. mount the SD card's "rootfs" (ext4) partition
+#   2. fill in the placeholders below, generate a UUID with: uuidgen
+#   3. copy to <rootfs>/etc/NetworkManager/system-connections/home-wifi.nmconnection
+#   4. sudo chown root:root <that file> && sudo chmod 600 <that file>   (NM ignores it otherwise)
+[connection]
+id=home-wifi
+uuid=PUT-A-UUID-HERE
+type=wifi
+interface-name=wlan0
+autoconnect=true
+
+[wifi]
+mode=infrastructure
+ssid=VODAFONE-HCNNXD
+
+[wifi-security]
+key-mgmt=wpa-psk
+psk=PUT-YOUR-WIFI-PASSWORD-HERE
+
+[ipv4]
+# address1=<ip>/<prefix>,<gateway>
+method=manual
+address1=192.168.1.50/24,192.168.1.1
+dns=1.1.1.1;9.9.9.9;
+may-fail=false
+
+[ipv6]
+method=auto

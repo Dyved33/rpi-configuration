@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Quick health report: pi-status
+echo "=== $(hostname) — $(uptime -p) ==="
+echo
+echo "--- Network ---"; ip -4 -br addr | grep -v '^lo'
+echo
+echo "--- Temperature / power ---"
+if command -v vcgencmd >/dev/null; then
+  vcgencmd measure_temp
+  t=$(vcgencmd get_throttled | cut -d= -f2)
+  echo "throttled flags: $t"
+  v=$((t))
+  [ $((v & 0x1))     -ne 0 ] && echo "  ! under-voltage NOW (bad power supply/cable)"
+  [ $((v & 0x2))     -ne 0 ] && echo "  ! ARM frequency capped NOW"
+  [ $((v & 0x4))     -ne 0 ] && echo "  ! throttled NOW"
+  [ $((v & 0x8))     -ne 0 ] && echo "  ! soft temperature limit NOW"
+  [ $((v & 0x10000)) -ne 0 ] && echo "  ! under-voltage happened since boot"
+  [ $((v & 0x20000)) -ne 0 ] && echo "  ! frequency cap happened since boot"
+  [ $((v & 0x40000)) -ne 0 ] && echo "  ! throttling happened since boot"
+  [ $((v & 0x80000)) -ne 0 ] && echo "  ! soft temp limit happened since boot"
+  [ "$v" -eq 0 ] && echo "  OK"
+fi
+echo
+echo "--- Memory ---"; free -h
+echo
+echo "--- Disk ---"; df -h /
+echo
+echo "--- Failed services ---"; systemctl --failed --no-legend || true
+exit 0

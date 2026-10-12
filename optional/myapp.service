@@ -1,0 +1,19 @@
+# Template: run your own program (e.g. the Go backend) at boot and restart it if it crashes.
+# Install:  sudo cp myapp.service /etc/systemd/system/myapp.service
+#           sudo systemctl daemon-reload && sudo systemctl enable --now myapp
+# Logs:     journalctl -u myapp -f
+[Unit]
+Description=My application
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=YOUR_USER
+WorkingDirectory=/home/YOUR_USER/app
+ExecStart=/home/YOUR_USER/app/server
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,6 @@
+[Unit]
+Description=Pi backup (rsync mirror)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/pi-backup
