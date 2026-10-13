@@ -3,6 +3,7 @@
 set -euo pipefail
 
 ############ EDIT THESE BEFORE RUNNING ############
+HOSTNAME="raspberrypi"            # unique name for this Pi (e.g. pi-sensor, pi-nas)
 TIMEZONE="Europe/Rome"
 LOCALE="en_GB.UTF-8"
 KEYBOARD_LAYOUT="it"
@@ -29,13 +30,41 @@ warn() { printf '\033[1;33m[!] %s\033[0m\n' "$*" >&2; }
 [ -d "$SRC/rootfs" ] || { echo "rootfs/ folder not found next to setup.sh"; exit 1; }
 TARGET_USER="${SUDO_USER:-}"
 
-log "1/10 Updating system and installing packages"
+# --- Detect Pi model ---
+PI_MODEL="unknown"
+if [ -f /proc/device-tree/model ]; then
+  PI_MODEL_FULL="$(tr -d '\0' < /proc/device-tree/model)"
+  case "$PI_MODEL_FULL" in
+    *"Pi 5"*)        PI_MODEL="pi5"       ;;
+    *"Pi 4"*|*"Pi 400"*) PI_MODEL="pi4"  ;;
+    *"Pi 3"*)        PI_MODEL="pi3"       ;;
+    *"Pi 2"*)        PI_MODEL="pi2"       ;;
+    *"Pi Model"*|*"Pi 1"*) PI_MODEL="pi1" ;;
+    *"Pi Zero 2"*)   PI_MODEL="pi-zero-2w" ;;
+    *"Pi Zero"*)     PI_MODEL="pi-zero-w" ;;
+  esac
+  echo "Detected model: $PI_MODEL_FULL  →  config group: $PI_MODEL"
+else
+  warn "Could not read /proc/device-tree/model — model-specific config.txt will be skipped"
+fi
+
+log "1/11 Updating system and installing packages"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get -y full-upgrade
 apt-get -y install ufw fail2ban unattended-upgrades avahi-daemon $EXTRA_PACKAGES
 
-log "2/10 Timezone, locale, keyboard, Wi-Fi country"
+log "2/11 Hostname"
+if [ -n "$HOSTNAME" ] && [ "$HOSTNAME" != "$(hostname)" ]; then
+  hostnamectl set-hostname "$HOSTNAME"
+  # Update /etc/hosts so 127.0.1.1 points to the new name
+  sed -i "s/127\.0\.1\.1.*/127.0.1.1\t$HOSTNAME/" /etc/hosts
+  echo "  hostname set to $HOSTNAME"
+else
+  echo "  hostname unchanged: $(hostname)"
+fi
+
+log "3/11 Timezone, locale, keyboard, Wi-Fi country"
 timedatectl set-timezone "$TIMEZONE" || warn "timezone failed"
 if command -v raspi-config >/dev/null; then
   raspi-config nonint do_change_locale "$LOCALE"               || warn "locale failed"
@@ -44,7 +73,7 @@ if command -v raspi-config >/dev/null; then
 fi
 timedatectl set-ntp true || true
 
-log "3/10 Installing config files from rootfs/ into /"
+log "4/11 Installing config files from rootfs/ into /"
 while IFS= read -r -d '' f; do
   rel="${f#./}"
   mode=0644
@@ -56,7 +85,32 @@ done < <(cd "$SRC/rootfs" && find . -type f -print0)
 [ "$ENABLE_WATCHDOG" = "yes" ] || rm -f /etc/systemd/system.conf.d/watchdog.conf
 [ "$ENABLE_FAIL2BAN" = "yes" ] || rm -f /etc/fail2ban/jail.d/sshd.local
 
-log "4/10 SSH hardening"
+# Apply model-specific config.txt if the model folder exists
+if [ "$PI_MODEL" != "unknown" ] && [ -f "$SRC/models/$PI_MODEL/config.txt.append" ]; then
+  BOOT_CONFIG=""
+  for bc in /boot/firmware/config.txt /boot/config.txt; do
+    [ -f "$bc" ] && { BOOT_CONFIG="$bc"; break; }
+  done
+  if [ -n "$BOOT_CONFIG" ]; then
+    if ! grep -q "pi-config: $PI_MODEL" "$BOOT_CONFIG" 2>/dev/null; then
+      printf '\n# --- pi-config: %s ---\n' "$PI_MODEL" >> "$BOOT_CONFIG"
+      cat "$SRC/models/$PI_MODEL/config.txt.append" >> "$BOOT_CONFIG"
+      echo "  appended models/$PI_MODEL/config.txt.append to $BOOT_CONFIG"
+    else
+      echo "  model config already present in $BOOT_CONFIG (skipping)"
+    fi
+  else
+    warn "Could not find config.txt (tried /boot/firmware/ and /boot/)"
+  fi
+else
+  if [ "$PI_MODEL" = "unknown" ]; then
+    warn "Model unknown — skipping model-specific config.txt"
+  else
+    warn "No model folder found at $SRC/models/$PI_MODEL/ — skipping model-specific config"
+  fi
+fi
+
+log "5/11 SSH hardening"
 KEYS_OK="no"
 if [ -n "$TARGET_USER" ]; then
   HOME_DIR="$(getent passwd "$TARGET_USER" | cut -d: -f6)"
@@ -75,7 +129,7 @@ else
   rm -f /etc/ssh/sshd_config.d/10-hardening.conf /etc/ssh/sshd_config.d/20-keys-only.conf
 fi
 
-log "5/10 Network: Wi-Fi power saving off, optional static IP"
+log "6/11 Network: Wi-Fi power saving off, optional static IP"
 if command -v nmcli >/dev/null; then
   systemctl reload NetworkManager || true
   if [ "$SET_STATIC_IP" = "yes" ]; then
@@ -92,22 +146,33 @@ else
   warn "NetworkManager not found (older OS?) — see README, section 'Older OS (Bullseye)'"
 fi
 
-log "6/10 mDNS (hostname.local)"
+log "7/11 mDNS (hostname.local)"
 systemctl enable --now avahi-daemon
 
-log "7/10 /tmp in RAM, sysctl, journald, watchdog"
-if ! findmnt -n -t tmpfs /tmp >/dev/null 2>&1; then systemctl enable tmp.mount || true; fi
+log "8/11 /tmp in RAM, sysctl, journald, watchdog"
+# Mount /tmp as tmpfs — try the systemd unit first, fall back to fstab
+if ! findmnt -n -t tmpfs /tmp >/dev/null 2>&1; then
+  if systemctl enable tmp.mount 2>/dev/null; then
+    echo "  tmp.mount enabled"
+  else
+    # tmp.mount not available (Bookworm/Trixie) — use fstab instead
+    if ! grep -q 'tmpfs.*/tmp' /etc/fstab 2>/dev/null; then
+      echo "tmpfs /tmp tmpfs defaults,noatime,nosuid,nodev,size=128M 0 0" >> /etc/fstab
+      echo "  /tmp tmpfs added to /etc/fstab (active after reboot)"
+    fi
+  fi
+fi
 sysctl --system >/dev/null
 systemctl restart systemd-journald
 systemctl daemon-reexec
 
-log "8/10 Automatic security updates"
+log "9/11 Automatic security updates"
 systemctl enable --now unattended-upgrades
 
-log "9/10 fail2ban"
+log "10/11 fail2ban"
 if [ "$ENABLE_FAIL2BAN" = "yes" ]; then systemctl enable fail2ban; systemctl restart fail2ban; fi
 
-log "10/10 Firewall (ufw)"
+log "11/11 Firewall (ufw)"
 if [ "$ENABLE_UFW" = "yes" ]; then
   ufw default deny incoming
   ufw default allow outgoing

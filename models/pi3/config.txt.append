@@ -1,0 +1,34 @@
+# ===== pi-config: Pi 3 tweaks =====
+# Append to config.txt for Raspberry Pi 3 Model B and 3 Model B+
+
+[all]
+disable_splash=1
+
+[pi3]
+# Headless: allocate minimum RAM to GPU
+# gpu_mem=16
+
+# Disable onboard Bluetooth (frees PL011 UART /ttyAMA0 for hardware serial console)
+# dtoverlay=disable-bt
+
+# Disable onboard Wi-Fi if connected via Ethernet
+# dtoverlay=disable-wifi
+
+# Turn off LEDs (activity and power)
+# dtparam=act_led_trigger=none
+# dtparam=act_led_activelow=off
+# dtparam=pwr_led_trigger=none
+# dtparam=pwr_led_activelow=off
+
+# Audio: edit existing "dtparam=audio=on" to "dtparam=audio=off"
+
+# --- Overclocking ---
+# Raspberry Pi 3B (BCM2837 @ 1.2 GHz stock):
+# arm_freq=1350
+# over_voltage=4
+# sdram_freq=500
+#
+# Raspberry Pi 3B+ (BCM2837B0 @ 1.4 GHz stock):
+# Notice: 3B+ already has higher factory clock & power-management heatspreader.
+# arm_freq=1500
+# over_voltage=4

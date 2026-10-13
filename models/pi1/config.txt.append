@@ -1,0 +1,29 @@
+# ===== pi-config: Pi 1 tweaks =====
+# Append to config.txt for Raspberry Pi 1 (Model A, A+, B, B+)
+
+[all]
+disable_splash=1
+
+[pi1]
+# Headless: allocate minimum RAM to GPU (leaves max RAM for Linux)
+# gpu_mem=16
+
+# Disable ACT LED (activity indicator) if running in dark environment
+# dtparam=act_led_trigger=none
+# dtparam=act_led_activelow=off
+
+# Audio: edit the existing "dtparam=audio=on" in config.txt to "dtparam=audio=off"
+
+# --- Overclocking (Legacy BCM2835) ---
+# WARNING: Requires adequate power supply and passive heatsink.
+# Medium: 900 MHz
+# arm_freq=900
+# core_freq=250
+# sdram_freq=450
+# over_voltage=2
+#
+# Turbo: 1000 MHz (Max standard overclock)
+# arm_freq=1000
+# core_freq=500
+# sdram_freq=600
+# over_voltage=6

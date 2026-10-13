@@ -1,0 +1,28 @@
+# ===== pi-config: Pi 2 tweaks =====
+# Append to config.txt for Raspberry Pi 2 Model B
+
+[all]
+disable_splash=1
+
+[pi2]
+# Headless: allocate minimum RAM to GPU
+# gpu_mem=16
+
+# Disable activity and power LEDs (commented)
+# dtparam=act_led_trigger=none
+# dtparam=act_led_activelow=off
+# dtparam=pwr_led_trigger=none
+# dtparam=pwr_led_activelow=off
+
+# Audio: edit existing "dtparam=audio=on" to "dtparam=audio=off"
+
+# --- Overclocking ---
+# Pi 2 v1.1 (BCM2836 900MHz Cortex-A7):
+# arm_freq=1000
+# core_freq=500
+# sdram_freq=500
+# over_voltage=2
+#
+# Pi 2 v1.2 (BCM2837 900MHz Cortex-A53 - Pi 3 SoC):
+# arm_freq=1200
+# over_voltage=2

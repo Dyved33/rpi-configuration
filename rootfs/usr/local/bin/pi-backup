@@ -3,8 +3,13 @@
 set -euo pipefail
 . /etc/pi-backup.conf
 [ -n "${BACKUP_DEST:-}" ] || { echo "BACKUP_DEST is empty in /etc/pi-backup.conf — nothing to do."; exit 0; }
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting backup to ${BACKUP_DEST%/}/$(hostname)/ ..."
 for s in $BACKUP_SOURCES; do
-  echo "Backing up $s ..."
-  rsync -aHAX --delete --relative "$s" "${BACKUP_DEST%/}/$(hostname)/"
+  if [ -d "$s" ]; then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Backing up $s ..."
+    rsync -aHAX --delete --relative "$s" "${BACKUP_DEST%/}/$(hostname)/"
+  else
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Warning: directory $s does not exist, skipping."
+  fi
 done
-echo "Done."
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Backup finished successfully."

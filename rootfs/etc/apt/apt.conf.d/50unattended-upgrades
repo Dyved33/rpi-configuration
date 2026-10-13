@@ -1,0 +1,14 @@
+// Automatically upgrade packages from these origins
+Unattended-Upgrade::Allowed-Origins {
+    "${distro_id}:${distro_codename}-security";
+    "${distro_id}ESMApps:${distro_codename}-apps-security";
+    "${distro_id}ESM:${distro_codename}-infra-security";
+    // Also include Raspberry Pi OS repository updates for security/stable fixes:
+    "Raspberry Pi Foundation:${distro_codename}";
+};
+
+// Auto remove unused dependencies
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+
+// Do not reboot automatically (keep headless server predictable)
+Unattended-Upgrade::Automatic-Reboot "false";

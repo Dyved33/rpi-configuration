@@ -1,0 +1,30 @@
+# ===== pi-config: Pi Zero / Zero W tweaks =====
+# Append to config.txt for Raspberry Pi Zero & Zero W
+
+[all]
+disable_splash=1
+
+[pi0]
+# Headless: allocate minimum RAM to GPU (conserves 512MB system memory)
+# gpu_mem=16
+
+# Disable onboard Bluetooth (Pi Zero W only)
+# dtoverlay=disable-bt
+
+# Disable onboard Wi-Fi (Pi Zero W only)
+# dtoverlay=disable-wifi
+
+# Activity LED (single green ACT LED)
+# dtparam=act_led_trigger=none
+# dtparam=act_led_activelow=off
+
+# USB OTG Gadget mode (Ethernet over USB / Serial over USB via data micro-USB port)
+# dtoverlay=dwc2
+
+# Audio: edit existing "dtparam=audio=on" to "dtparam=audio=off"
+
+# --- Overclocking (Stock 1.0 GHz BCM2835) ---
+# Notice: Small PCB area limits heat dissipation.
+# arm_freq=1050
+# core_freq=500
+# over_voltage=4

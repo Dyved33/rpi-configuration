@@ -1,0 +1,34 @@
+# ===== pi-config: Pi Zero 2 W tweaks =====
+# Append to config.txt for Raspberry Pi Zero 2 W
+
+[all]
+disable_splash=1
+
+[pi02]
+# Headless: allocate minimum RAM to GPU
+# gpu_mem=16
+
+# Disable onboard Bluetooth
+# dtoverlay=disable-bt
+
+# Disable onboard Wi-Fi
+# dtoverlay=disable-wifi
+
+# Activity LED
+# dtparam=act_led_trigger=none
+# dtparam=act_led_activelow=off
+
+# USB OTG Gadget mode
+# dtoverlay=dwc2
+
+# Audio: edit existing "dtparam=audio=on" to "dtparam=audio=off"
+
+# --- Overclocking (RP3A0 / BCM2710A1 quad-core Cortex-A53) ---
+# Stock clock is 1.0 GHz (downclocked from Pi 3's 1.2GHz for thermals).
+# Moderate (1.2 GHz - Pi 3 baseline):
+# arm_freq=1200
+# over_voltage=2
+#
+# High (1.3 GHz - requires small heatsink):
+# arm_freq=1300
+# over_voltage=4

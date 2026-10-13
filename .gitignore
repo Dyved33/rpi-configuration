@@ -1,0 +1,16 @@
+# Sensitive generated files — never commit these
+userconf.txt
+*.nmconnection
+!optional/home-wifi.nmconnection
+
+# Editor swap/backup files
+*.swp
+*.swo
+*~
+*.bak
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

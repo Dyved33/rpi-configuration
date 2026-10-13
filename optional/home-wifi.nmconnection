@@ -13,7 +13,7 @@ autoconnect=true
 
 [wifi]
 mode=infrastructure
-ssid=VODAFONE-HCNNXD
+ssid=YOUR-SSID-HERE
 
 [wifi-security]
 key-mgmt=wpa-psk

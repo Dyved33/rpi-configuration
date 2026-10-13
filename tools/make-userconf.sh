@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Run on your PC (Linux, macOS, WSL or Git Bash). Creates ./userconf.txt
 # Copy the result to the BOOT partition of the SD card.
+# NOTE: userconf.txt is supported on Bullseye & Bookworm. On newer distributions (Trixie+),
+# the official and recommended method is pre-configuring credentials via Raspberry Pi Imager.
 set -euo pipefail
 read -rp  "Username for the Pi: " U
 read -rsp "Password: " P; echo

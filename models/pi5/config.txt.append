@@ -1,0 +1,38 @@
+# ===== pi-config: Pi 5 tweaks =====
+# Append to config.txt for Raspberry Pi 5
+
+[all]
+disable_splash=1
+
+[pi5]
+# NOTE on RAM / GPU:
+# 'gpu_mem' is IGNORED on Raspberry Pi 5. The VideoCore VII architecture uses
+# the KMS kernel driver and dynamic memory allocation via CMA (Contiguous Memory Allocator).
+
+# Disable onboard Bluetooth (Notice: Pi 5 uses dtparam, NOT dtoverlay=disable-bt)
+# dtparam=bluetooth=off
+
+# Disable onboard Wi-Fi if using wired Ethernet
+# dtoverlay=disable-wifi
+
+# Activity LED (Pi 5 has one programmable ACT LED; PWR LED is managed by the DA9091 PMIC)
+# dtparam=act_led_trigger=none
+
+# PCIe Gen 3 enablement for M.2 NVMe HAT (default is PCIe Gen 2)
+# dtparam=pciex1_gen=3
+
+# Increase maximum USB current output to 1.6A (automatic if 5V/5A 27W PSU is detected)
+# usb_max_current_enable=1
+
+# Audio: edit existing "dtparam=audio=on" to "dtparam=audio=off"
+
+# --- Overclocking (BCM2712 @ 2.4 GHz stock) ---
+# WARNING: Pi 5 uses 'over_voltage_delta' in microvolts (uV), NOT 'over_voltage' steps!
+# Requires Raspberry Pi Active Cooler or equivalent heatsink + PWM fan.
+# Moderate (2.8 GHz):
+# arm_freq=2800
+# over_voltage_delta=25000
+#
+# High performance (3.0 GHz):
+# arm_freq=3000
+# over_voltage_delta=50000

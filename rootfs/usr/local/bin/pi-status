@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 # Quick health report: pi-status
 echo "=== $(hostname) — $(uptime -p) ==="
+[ -f /proc/device-tree/model ] && echo "Model: $(tr -d '\0' < /proc/device-tree/model)"
 echo
 echo "--- Network ---"; ip -4 -br addr | grep -v '^lo'
 echo
 echo "--- Temperature / power ---"
 if command -v vcgencmd >/dev/null; then
   vcgencmd measure_temp
+  # Pi 5 has a PMIC (power management IC) with its own temperature sensor
+  pmic_temp="$(vcgencmd measure_temp pmic 2>/dev/null || true)"
+  [ -n "$pmic_temp" ] && echo "PMIC $pmic_temp"
   t=$(vcgencmd get_throttled | cut -d= -f2)
   echo "throttled flags: $t"
   v=$((t))

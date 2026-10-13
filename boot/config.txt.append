@@ -1,28 +1,43 @@
 # ===== pi-config: headless tweaks =====
-# APPEND these lines to the END of the existing config.txt (do not replace the file).
-# Only lines without a leading '#' are active.
-# NOTE: config.txt does not support comments at the end of a line, so every
-# comment sits on its own line.
+# This is a universal template. For model-specific templates with pre-tuned settings,
+# see the corresponding models/ directory (e.g., models/pi4/, models/pi5/, etc.).
+#
+# When running setup.sh on the Pi, it automatically detects your hardware model
+# and applies the correct file from models/<detected-model>/config.txt.append!
+#
+# If applying manually, append these lines to the END of /boot/firmware/config.txt.
+# NOTE: In config.txt, comments must be on their own line.
 
 [all]
-# Skip the rainbow splash screen at boot
+# Skip rainbow splash screen
 disable_splash=1
 
-# Headless: give the GPU the minimum RAM (ignored on Pi 5)
-# gpu_mem=16
+[pi5]
+# Note: gpu_mem is ignored on Pi 5 (uses dynamic CMA allocator)
+# dtparam=bluetooth=off
+# dtparam=pciex1_gen=3
+# dtparam=act_led_trigger=none
 
-# Disable Bluetooth if you do not use it (Pi 3/4/Zero 2 W; Pi 5 needs a different overlay)
+[pi4]
+# gpu_mem=16
+# dtoverlay=disable-bt
+# dtparam=act_led_trigger=none
+
+[pi3]
+# gpu_mem=16
+# dtoverlay=disable-bt
+# dtparam=act_led_trigger=none
+
+[pi02]
+# gpu_mem=16
 # dtoverlay=disable-bt
 
-# Turn off the activity and power LEDs (names/behaviour are model dependent)
-# dtparam=act_led_trigger=none
-# dtparam=act_led_activelow=off
-# dtparam=pwr_led_trigger=none
-# dtparam=pwr_led_activelow=off
+[pi0]
+# gpu_mem=16
+# dtoverlay=dwc2
 
-# Overclock (Pi 4 example). Needs a heatsink/fan and a good power supply. Can cause instability.
-# arm_freq=2000
-# over_voltage=6
+[pi2]
+# gpu_mem=16
 
-# Audio: do NOT append "dtparam=audio=off". Instead edit the existing
-# "dtparam=audio=on" line in config.txt and change it to "dtparam=audio=off".
+[pi1]
+# gpu_mem=16
