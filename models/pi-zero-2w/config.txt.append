@@ -1,4 +1,4 @@
-# ===== pi-config: Pi Zero 2 W tweaks =====
+# ===== rpi-configuration: Pi Zero 2 W tweaks =====
 # Append to config.txt for Raspberry Pi Zero 2 W
 
 [all]

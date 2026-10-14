@@ -1,4 +1,4 @@
-# ===== pi-config: Pi 3 tweaks =====
+# ===== rpi-configuration: Pi 3 tweaks =====
 # Append to config.txt for Raspberry Pi 3 Model B and 3 Model B+
 
 [all]

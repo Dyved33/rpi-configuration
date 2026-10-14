@@ -1,4 +1,4 @@
-# ===== pi-config: Pi 5 tweaks =====
+# ===== rpi-configuration: Pi 5 tweaks =====
 # Append to config.txt for Raspberry Pi 5
 
 [all]

@@ -1,5 +1,10 @@
 # Raspberry Pi 1 (Model A, A+, B, B+)
 
+> **When to use this guide:** the original Pi — 32-bit `armv6l` only and limited
+> RAM. Best for very light, low-power or legacy tasks. For the model index see
+> [`../README.md`](../README.md); for any unfamiliar term see
+> [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md).
+
 ## Hardware Specifications
 - **SoC:** Broadcom BCM2835 (ARMv6)
 - **CPU:** ARM1176JZF-S single-core @ 700 MHz
@@ -20,3 +25,9 @@
 | Stock | 700 MHz | 250 MHz | 400 MHz | 0 |
 | Medium | 900 MHz | 250 MHz | 450 MHz | 2 |
 | Turbo | 1000 MHz | 500 MHz | 600 MHz | 6 |
+
+## Related
+
+- [`../README.md`](../README.md) — model index and how auto-detection works.
+- [`config.txt.append`](config.txt.append) — boot tweaks appended by `setup.sh`.
+- [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — term definitions.

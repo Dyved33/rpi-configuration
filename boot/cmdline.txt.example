@@ -1,4 +1,4 @@
-# ===== pi-config: headless tweaks for cmdline.txt =====
+# ===== rpi-configuration: headless tweaks for cmdline.txt =====
 #
 # cmdline.txt lives on the BOOT partition alongside config.txt.
 # Unlike config.txt, ALL parameters must be on a SINGLE LINE (no line breaks).

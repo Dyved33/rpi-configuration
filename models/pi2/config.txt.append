@@ -1,4 +1,4 @@
-# ===== pi-config: Pi 2 tweaks =====
+# ===== rpi-configuration: Pi 2 tweaks =====
 # Append to config.txt for Raspberry Pi 2 Model B
 
 [all]

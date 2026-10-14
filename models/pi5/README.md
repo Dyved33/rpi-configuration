@@ -1,5 +1,10 @@
 # Raspberry Pi 5
 
+> **When to use this guide:** the Pi 5 is the current flagship — the fastest Pi,
+> with PCIe/NVMe support and a 27W USB-C power requirement. For the model index
+> see [`../README.md`](../README.md); for any unfamiliar term see
+> [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md).
+
 ## Hardware Specifications
 - **SoC:** Broadcom BCM2712 quad-core ARM Cortex-A76 (ARMv8.2-A) @ 2.4 GHz (cryptography extensions supported)
 - **RAM:** 2 GB, 4 GB, or 8 GB LPDDR4X-4267 SDRAM
@@ -42,3 +47,9 @@ The official **Raspberry Pi Active Cooler** (anodized aluminum heatsink with a 4
 | Stock | 2400 MHz | 0 | Active Cooler / Heatsink |
 | Moderate | 2800 MHz | 25000 (25 mV) | Raspberry Pi Active Cooler |
 | High | 3000 MHz | 50000 (50 mV) | High performance active cooler |
+
+## Related
+
+- [`../README.md`](../README.md) — model index and how auto-detection works.
+- [`config.txt.append`](config.txt.append) — boot tweaks appended by `setup.sh`.
+- [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — term definitions.

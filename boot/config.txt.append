@@ -1,4 +1,4 @@
-# ===== pi-config: headless tweaks =====
+# ===== rpi-configuration: headless tweaks =====
 # This is a universal template. For model-specific templates with pre-tuned settings,
 # see the corresponding models/ directory (e.g., models/pi4/, models/pi5/, etc.).
 #

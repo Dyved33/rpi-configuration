@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
-# Run ON THE PI:   sudo bash setup.sh
+# rpi-configuration — installer. Run ON THE PI:   sudo bash setup.sh
 set -euo pipefail
 
-############ EDIT THESE BEFORE RUNNING ############
+SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+#### Built-in defaults — override any of these in setup.conf (see setup.conf.example) ####
 HOSTNAME="raspberrypi"            # unique name for this Pi (e.g. pi-sensor, pi-nas)
-TIMEZONE="Europe/Rome"
-LOCALE="en_GB.UTF-8"
-KEYBOARD_LAYOUT="it"
-WIFI_COUNTRY="IT"
+TIMEZONE="UTC"
+LOCALE="en_US.UTF-8"
+KEYBOARD_LAYOUT="us"
+WIFI_COUNTRY="US"
 
 # Static IP through NetworkManager (Bookworm/Trixie). "no" if you already did it.
 SET_STATIC_IP="no"
@@ -20,9 +22,14 @@ ENABLE_UFW="yes"          # firewall: deny incoming except SSH (+mDNS)
 ENABLE_FAIL2BAN="yes"     # ban IPs that fail SSH logins repeatedly
 ENABLE_WATCHDOG="yes"     # auto-reboot on freeze
 EXTRA_PACKAGES="htop tmux git vim rsync curl ncdu"
-###################################################
+#########################################################################################
 
-SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Load user settings if present (copy setup.conf.example -> setup.conf and edit it).
+if [ -f "$SRC/setup.conf" ]; then
+  # shellcheck source=/dev/null
+  . "$SRC/setup.conf"
+fi
+
 log()  { printf '\n\033[1;32m==> %s\033[0m\n' "$*"; }
 warn() { printf '\033[1;33m[!] %s\033[0m\n' "$*" >&2; }
 
@@ -92,8 +99,8 @@ if [ "$PI_MODEL" != "unknown" ] && [ -f "$SRC/models/$PI_MODEL/config.txt.append
     [ -f "$bc" ] && { BOOT_CONFIG="$bc"; break; }
   done
   if [ -n "$BOOT_CONFIG" ]; then
-    if ! grep -q "pi-config: $PI_MODEL" "$BOOT_CONFIG" 2>/dev/null; then
-      printf '\n# --- pi-config: %s ---\n' "$PI_MODEL" >> "$BOOT_CONFIG"
+    if ! grep -q "rpi-configuration: $PI_MODEL" "$BOOT_CONFIG" 2>/dev/null; then
+      printf '\n# --- rpi-configuration: %s ---\n' "$PI_MODEL" >> "$BOOT_CONFIG"
       cat "$SRC/models/$PI_MODEL/config.txt.append" >> "$BOOT_CONFIG"
       echo "  appended models/$PI_MODEL/config.txt.append to $BOOT_CONFIG"
     else

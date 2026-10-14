@@ -1,4 +1,4 @@
-# ===== pi-config: Pi 1 tweaks =====
+# ===== rpi-configuration: Pi 1 tweaks =====
 # Append to config.txt for Raspberry Pi 1 (Model A, A+, B, B+)
 
 [all]

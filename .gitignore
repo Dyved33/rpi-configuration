@@ -1,5 +1,6 @@
-# Sensitive generated files — never commit these
+# Sensitive / machine-specific files — never commit these
 userconf.txt
+setup.conf
 *.nmconnection
 !optional/home-wifi.nmconnection
 

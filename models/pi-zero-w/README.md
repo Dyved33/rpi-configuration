@@ -1,5 +1,10 @@
 # Raspberry Pi Zero / Zero W
 
+> **When to use this guide:** tiny, cheap, low-power boards, ideal for embedded
+> or single-cable (USB gadget) setups. For the model index see
+> [`../README.md`](../README.md); for any unfamiliar term see
+> [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md).
+
 ## Hardware Specifications
 - **SoC:** Broadcom BCM2835 (ARMv6)
 - **CPU:** ARM1176JZF-S single-core @ 1.0 GHz
@@ -18,3 +23,9 @@
   3. Connect the PC to the inner micro-USB port (labeled "USB", not "PWR"). The Pi enumerates as a USB virtual network card.
 - **GPU Memory (`gpu_mem=16`):** Essential for maximizing available RAM for system processes.
 - **OS Support:** 32-bit `armv6l` ONLY.
+
+## Related
+
+- [`../README.md`](../README.md) — model index and how auto-detection works.
+- [`config.txt.append`](config.txt.append) — boot tweaks appended by `setup.sh`.
+- [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — term definitions.

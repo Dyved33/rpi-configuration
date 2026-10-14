@@ -1,4 +1,4 @@
-# ===== pi-config: Pi 4 tweaks =====
+# ===== rpi-configuration: Pi 4 tweaks =====
 # Append to config.txt for Raspberry Pi 4 Model B & Pi 400
 
 [all]

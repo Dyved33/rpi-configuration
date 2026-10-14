@@ -1,0 +1,46 @@
+# ============================================================================
+#  rpi-configuration — example user settings
+# ============================================================================
+#  HOW TO USE
+#    1. Copy this file to "setup.conf" next to setup.sh:
+#         cp setup.conf.example setup.conf
+#    2. Edit the values below for your machine/network.
+#    3. Run the installer on the Pi:   sudo bash setup.sh
+#
+#  If "setup.conf" is missing, setup.sh falls back to the same neutral
+#  defaults shown here. "setup.conf" is git-ignored so your real hostname,
+#  IP addresses and Wi-Fi country are never committed.
+#
+#  This file is plain shell: assign variables, do not add spaces around "=".
+# ============================================================================
+
+# --- Identity -------------------------------------------------------------
+# Unique name for this Pi on the network. Resolves as <HOSTNAME>.local via mDNS.
+HOSTNAME="raspberrypi"
+
+# --- Localization ---------------------------------------------------------
+# Any timezone from `timedatectl list-timezones` (e.g. Europe/Rome, America/New_York).
+TIMEZONE="UTC"
+# Locale from `locale -a` (must end in .UTF-8).
+LOCALE="en_US.UTF-8"
+# Console keyboard layout (e.g. us, gb, it, de).
+KEYBOARD_LAYOUT="us"
+# Wi-Fi regulatory country, ISO 3166-1 alpha-2 (e.g. US, GB, IT). Required for Wi-Fi.
+WIFI_COUNTRY="US"
+
+# --- Static IP (NetworkManager, Bookworm/Trixie) --------------------------
+# Leave SET_STATIC_IP="no" to keep DHCP. Set to "yes" to apply a fixed address.
+SET_STATIC_IP="no"
+NET_DEVICE="wlan0"
+STATIC_IP="192.168.1.50/24"     # <address>/<prefix-length>
+GATEWAY="192.168.1.1"
+DNS_SERVERS="1.1.1.1 9.9.9.9"   # space-separated
+
+# --- Feature toggles ------------------------------------------------------
+ENABLE_UFW="yes"          # firewall: deny incoming except SSH (+ mDNS)
+ENABLE_FAIL2BAN="yes"     # ban IPs that fail SSH logins repeatedly
+ENABLE_WATCHDOG="yes"     # auto-reboot the Pi if the kernel freezes
+
+# --- Extra packages -------------------------------------------------------
+# Space-separated list installed with apt alongside the base packages.
+EXTRA_PACKAGES="htop tmux git vim rsync curl ncdu"

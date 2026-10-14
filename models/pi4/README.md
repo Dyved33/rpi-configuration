@@ -1,5 +1,10 @@
 # Raspberry Pi 4 Model B / Pi 400
 
+> **When to use this guide:** this is the workhorse 64-bit Pi generation, with
+> USB 3.0 and true Gigabit Ethernet — the most common choice for a headless
+> server. For the model index see [`../README.md`](../README.md); for any
+> unfamiliar term see [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md).
+
 ## Hardware Specifications
 - **SoC:** Broadcom BCM2711 quad-core Cortex-A72 (ARM v8) @ 1.5 GHz (Pi 4 rev 1.4/1.5 & Pi 400 default to 1.8 GHz)
 - **RAM:** 1 GB, 2 GB, 4 GB, or 8 GB LPDDR4-3200 SDRAM
@@ -23,3 +28,9 @@
 | Stock | 1500–1800 MHz | 0 | 500 MHz | Passive heatsink |
 | Safe Daily | 2000 MHz | 6 | 600 MHz | Active cooling (fan) |
 | High | 2147 MHz | 8 | 750 MHz | High-efficiency active cooling |
+
+## Related
+
+- [`../README.md`](../README.md) — model index and how auto-detection works.
+- [`config.txt.append`](config.txt.append) — boot tweaks appended by `setup.sh`.
+- [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — term definitions.

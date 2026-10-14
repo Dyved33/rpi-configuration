@@ -1,5 +1,10 @@
 # Raspberry Pi 3 (Model B & Model B+)
 
+> **When to use this guide:** the Pi 3 introduced 64-bit capable cores and
+> onboard Wi-Fi/Bluetooth; it is a solid, low-cost headless node. For the model
+> index see [`../README.md`](../README.md); for any unfamiliar term see
+> [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md).
+
 ## Hardware Specifications
 - **SoC:**
   - **Pi 3 Model B:** Broadcom BCM2837 quad-core Cortex-A53 @ 1.2 GHz
@@ -16,3 +21,9 @@
 - **64-bit Architecture:** Fully supported by Debian Bookworm/Trixie `arm64`. Recommended for modern Docker and Go binaries.
 - **Bluetooth & Serial Console:** Disabling Bluetooth via `dtoverlay=disable-bt` restores the primary hardware UART (`ttyAMA0` / PL011) to the GPIO pins, replacing the software mini-UART.
 - **Thermal Behavior:** The 3B can reach thermal throttling (80°C) under sustained load without a heatsink. The 3B+ includes improved power circuitry and heat distribution, but passive cooling is still advised for 24/7 headless servers.
+
+## Related
+
+- [`../README.md`](../README.md) — model index and how auto-detection works.
+- [`config.txt.append`](config.txt.append) — boot tweaks appended by `setup.sh`.
+- [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — term definitions.
